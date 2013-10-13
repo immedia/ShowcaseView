@@ -1,17 +1,16 @@
 package com.github.espiandev.showcaseview.target;
 
-import android.app.Activity;
-import android.graphics.Point;
-import android.view.View;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
+
+import android.app.Activity;
+import android.graphics.Point;
+import android.view.View;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
@@ -48,13 +47,12 @@ public class ViewTargetTests {
         verify(mView, never()).getLocationInWindow(Matchers.<int[]>any());
     }
 
-    @Ignore
     @Test
     public void viewTargetReturnsCorrectPointForInsertToDecor() {
         ViewTarget target = new ViewTarget(mView);
         target.setInsertToDecor(true);
-//        when(mView.getLeft()).thenReturn(VIEW_LEFT);
-//        when(mView.getTop()).thenReturn(VIEW_TOP);
+        when(mView.getLeft()).thenReturn(VIEW_LEFT);
+        when(mView.getTop()).thenReturn(VIEW_TOP);
         Point p = target.getTargetPoint();
         assertEquals(VIEW_LEFT + VIEW_DIMENSION / 2, p.x);
         assertEquals(VIEW_TOP + VIEW_DIMENSION / 2, p.y);

@@ -28,6 +28,7 @@
         <dependency>
             <groupId>com.nineoldandroids</groupId>
             <artifactId>library</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
