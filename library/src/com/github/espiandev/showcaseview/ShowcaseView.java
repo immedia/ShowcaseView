@@ -516,6 +516,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+        hide();
+    }
+
+    public void hide() {
         // If the type is set to one-shot, store that it has shot
         if (mOptions.shotType == TYPE_ONE_SHOT) {
             SharedPreferences internal = getContext().getSharedPreferences(PREFS_SHOWCASE_INTERNAL, Context.MODE_PRIVATE);
@@ -525,10 +529,6 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
                 internal.edit().putBoolean("hasShot" + getConfigOptions().showcaseId, true).commit();
             }
         }
-        hide();
-    }
-
-    public void hide() {
         if (mEventListener != null) {
             mEventListener.onShowcaseViewHide(this);
         }
