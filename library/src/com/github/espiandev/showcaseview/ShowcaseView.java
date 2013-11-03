@@ -129,7 +129,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             isRedundant = true;
             return;
         }
-        showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached);
+        showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring);
         showcase.setColorFilter(mShowcaseColor, PorterDuff.Mode.MULTIPLY);
 
         showcaseRadius = metricScale * INNER_CIRCLE_RADIUS;
