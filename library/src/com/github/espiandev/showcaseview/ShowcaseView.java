@@ -42,6 +42,10 @@ import static com.github.espiandev.showcaseview.anim.AnimationUtils.AnimationSta
  */
 public class ShowcaseView extends RelativeLayout implements View.OnClickListener, View.OnTouchListener {
 
+    public static final int SHOWCASE_TYPE_NORMAL = 0;
+    public static final int SHOWCASE_TYPE_SINGLE_RING = 1;
+    public static final int SHOWCASE_TYPE_SMALL = 2;
+
     public static final int TYPE_NO_LIMIT = 0;
     public static final int TYPE_ONE_SHOT = 1;
 
@@ -55,7 +59,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     public static final int ITEM_ACTION_OVERFLOW = 6;
 
     private static final String PREFS_SHOWCASE_INTERNAL = "showcase_internal";
-    public static final int INNER_CIRCLE_RADIUS = 94;
+    public static int INNER_CIRCLE_RADIUS = 94;
 
     private float showcaseX = -1;
     private float showcaseY = -1;
@@ -129,7 +133,16 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             isRedundant = true;
             return;
         }
-        showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring);
+        if (mOptions.showcaseType == SHOWCASE_TYPE_NORMAL) {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached);
+            INNER_CIRCLE_RADIUS = 94;
+        } else if (mOptions.showcaseType == SHOWCASE_TYPE_SINGLE_RING) {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring);
+            INNER_CIRCLE_RADIUS = 94;
+        } else {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring_small);
+            INNER_CIRCLE_RADIUS = 47;
+        }
         showcase.setColorFilter(mShowcaseColor, PorterDuff.Mode.MULTIPLY);
 
         showcaseRadius = metricScale * INNER_CIRCLE_RADIUS;
@@ -818,6 +831,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         public int showcaseId = 0;
         public int shotType = TYPE_NO_LIMIT;
         public int insert = INSERT_TO_DECOR;
+        public int showcaseType = SHOWCASE_TYPE_NORMAL;
         public boolean hideOnClickOutside = false;
 
         /**
