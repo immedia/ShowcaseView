@@ -1,5 +1,6 @@
 package com.github.espiandev.showcaseview;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -565,14 +566,14 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
                 internal.edit().putBoolean("hasShot" + getConfigOptions().showcaseId, true).commit();
             }
         }
-        if (mEventListener != null) {
-            mEventListener.onShowcaseViewHide(this);
-        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && getConfigOptions().fadeOutDuration > 0) {
             fadeOutShowcase();
         } else {
             setVisibility(View.GONE);
+            if (mEventListener != null) {
+                mEventListener.onShowcaseViewHide(this);
+            }
         }
     }
 
@@ -580,6 +581,9 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         AnimationUtils.createFadeOutAnimation(this, getConfigOptions().fadeOutDuration, new AnimationEndListener() {
             @Override
             public void onAnimationEnd() {
+                if (mEventListener != null) {
+                    mEventListener.onShowcaseViewHide(ShowcaseView.this);
+                }
                 setVisibility(View.GONE);
             }
         }).start();
@@ -596,7 +600,9 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void fadeInShowcase() {
+        setAlpha(0);
         AnimationUtils.createFadeInAnimation(this, getConfigOptions().fadeInDuration, new AnimationStartListener() {
             @Override
             public void onAnimationStart() {
@@ -713,8 +719,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcaseView(viewToShowcase);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
@@ -738,8 +746,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcaseView(viewToShowcase);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
@@ -771,8 +781,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcasePosition(x, y);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
@@ -786,8 +798,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcasePosition(x, y);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
@@ -815,8 +829,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcaseItem(type, itemId, activity);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
@@ -840,8 +856,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else {
             ((ViewGroup) activity.findViewById(android.R.id.content)).addView(sv);
         }
+        sv.setVisibility(GONE);
         sv.setShowcaseItem(type, itemId, activity);
         sv.setText(title, detailText);
+        sv.show();
         return sv;
     }
 
