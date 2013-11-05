@@ -89,6 +89,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     private float scaleMultiplier = 1f;
     private Bitmap mBleachedCling;
     private int mShowcaseColor;
+    private Rect mHalfVoidedArea;
 
     protected ShowcaseView(Context context) {
         this(context, null, R.styleable.CustomTheme_showcaseViewStyle);
@@ -435,10 +436,11 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
                 canvas.save();
                 if (recalculateText) {
                 mDynamicTitleLayout = new DynamicLayout(mTitleText, mPaintTitle,
-                        (int) mBestTextPosition[2], Layout.Alignment.ALIGN_NORMAL,
+                        (int) mBestTextPosition[2],
+                        mBestTextPosition[0] == 1 ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE,
                         1.0f, 1.0f, true);
                 }
-                canvas.translate(mBestTextPosition[0], mBestTextPosition[1] - 24 * metricScale);
+                canvas.translate(24 * metricScale, mBestTextPosition[1] - 24 * metricScale);
                 mDynamicTitleLayout.draw(canvas);
                 canvas.restore();
             }
@@ -447,10 +449,11 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
                 canvas.save();
                 if (recalculateText) {
                     mDynamicDetailLayout = new DynamicLayout(mSubText, mPaintDetail,
-                            ((Number) mBestTextPosition[2]).intValue(), Layout.Alignment.ALIGN_NORMAL,
+                            ((Number) mBestTextPosition[2]).intValue(),
+                            mBestTextPosition[0] == 1 ? Layout.Alignment.ALIGN_NORMAL : Layout.Alignment.ALIGN_OPPOSITE,
                             1.2f, 1.0f, true);
                 }
-                canvas.translate(mBestTextPosition[0], mBestTextPosition[1] + 12 * metricScale);
+                canvas.translate(24 * metricScale, mBestTextPosition[1] + 12 * metricScale);
                 mDynamicDetailLayout.draw(canvas);
                 canvas.restore();
 
@@ -471,13 +474,29 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     private float[] getBestTextPosition(int canvasW, int canvasH) {
 
         //if the width isn't much bigger than the voided area, just consider top & bottom
-        float spaceTop = voidedArea.top;
-        float spaceBottom = canvasH - voidedArea.bottom - 64 * metricScale; //64dip considers the OK button
-        //float spaceLeft = voidedArea.left;
-        //float spaceRight = canvasW - voidedArea.right;
+        float spaceTop = mHalfVoidedArea.top;
+        float spaceBottom = canvasH - mHalfVoidedArea.bottom - 64 * metricScale; //64dip considers the OK button
+        float spaceLeft = voidedArea.left;
+        float spaceRight = canvasW - voidedArea.right;
 
         //TODO: currently only considers above or below showcase, deal with left or right
-        return new float[]{24 * metricScale, spaceTop > spaceBottom ? 128 * metricScale : 24 * metricScale + voidedArea.bottom, canvasW - 48 * metricScale};
+        float leftPadding;
+        float topPadding;
+        if (spaceLeft > spaceRight) {
+            leftPadding = -1;
+        } else {
+            leftPadding = 1;
+        }
+        if (spaceTop > spaceBottom) {
+            topPadding = mHalfVoidedArea.top - 72 * metricScale;
+        } else {
+            topPadding = 24 * metricScale + mHalfVoidedArea.bottom;
+        }
+
+        float width = canvasW - 48 * metricScale;
+        return new float[]{leftPadding,
+                           topPadding,
+                           width};
 
     }
 
@@ -498,6 +517,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             int dh = showcase.getIntrinsicHeight();
 
             voidedArea = new Rect(cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2);
+
+            dw = dw / 2;
+            dh = dh / 2;
+            mHalfVoidedArea = new Rect(cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2);
 
             legacyShowcaseX = showcaseX;
             legacyShowcaseY = showcaseY;
