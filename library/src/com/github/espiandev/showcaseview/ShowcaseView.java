@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.DynamicLayout;
@@ -46,6 +47,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     public static final int SHOWCASE_TYPE_NORMAL = 0;
     public static final int SHOWCASE_TYPE_SINGLE_RING = 1;
     public static final int SHOWCASE_TYPE_SMALL = 2;
+    public static final int SHOWCASE_TYPE_NONE = 3;
 
     public static final int TYPE_NO_LIMIT = 0;
     public static final int TYPE_ONE_SHOT = 1;
@@ -141,9 +143,12 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         } else if (mOptions.showcaseType == SHOWCASE_TYPE_SINGLE_RING) {
             showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring);
             INNER_CIRCLE_RADIUS = 94;
-        } else {
+        } else if (mOptions.showcaseType == SHOWCASE_TYPE_SMALL) {
             showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring_small);
             INNER_CIRCLE_RADIUS = 47;
+        } else {
+            showcase = new ColorDrawable(Color.TRANSPARENT);
+            INNER_CIRCLE_RADIUS = 0;
         }
         showcase.setColorFilter(mShowcaseColor, PorterDuff.Mode.MULTIPLY);
 
