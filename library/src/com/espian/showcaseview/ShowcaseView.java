@@ -13,6 +13,9 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -35,6 +38,11 @@ import static com.espian.showcaseview.anim.AnimationUtils.AnimationStartListener
 public class ShowcaseView extends RelativeLayout
         implements View.OnClickListener, View.OnTouchListener {
 
+    public static final int SHOWCASE_TYPE_NORMAL = 0;
+    public static final int SHOWCASE_TYPE_SINGLE_RING = 1;
+    public static final int SHOWCASE_TYPE_SMALL = 2;
+    public static final int SHOWCASE_TYPE_NONE = 3;
+
     public static final int TYPE_NO_LIMIT = 0;
     public static final int TYPE_ONE_SHOT = 1;
 
@@ -48,7 +56,7 @@ public class ShowcaseView extends RelativeLayout
     public static final int ITEM_ACTION_OVERFLOW = 6;
 
     protected static final String PREFS_SHOWCASE_INTERNAL = "showcase_internal";
-    public static final int INNER_CIRCLE_RADIUS = 94;
+    public static int INNER_CIRCLE_RADIUS = 94;
 
     private float showcaseX = -1;
     private float showcaseY = -1;
@@ -70,6 +78,7 @@ public class ShowcaseView extends RelativeLayout
     private int mShowcaseColor;
     private TextDrawer mTextDrawer;
     private ClingDrawer mClingDrawer;
+    private Drawable showcase;
 
     protected ShowcaseView(Context context) {
         this(context, null, R.styleable.CustomTheme_showcaseViewStyle);
@@ -130,6 +139,21 @@ public class ShowcaseView extends RelativeLayout
             isRedundant = true;
             return;
         }
+
+        if (mOptions.showcaseType == SHOWCASE_TYPE_NORMAL) {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached);
+            INNER_CIRCLE_RADIUS = 94;
+        } else if (mOptions.showcaseType == SHOWCASE_TYPE_SINGLE_RING) {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring);
+            INNER_CIRCLE_RADIUS = 94;
+        } else if (mOptions.showcaseType == SHOWCASE_TYPE_SMALL) {
+            showcase = getContext().getResources().getDrawable(R.drawable.cling_bleached_single_ring_small);
+            INNER_CIRCLE_RADIUS = 20;
+        } else {
+            showcase = new ColorDrawable(Color.TRANSPARENT);
+            INNER_CIRCLE_RADIUS = 0;
+        }
+        showcase.setColorFilter(mShowcaseColor, PorterDuff.Mode.MULTIPLY);
 
         showcaseRadius = metricScale * INNER_CIRCLE_RADIUS;
         setOnTouchListener(this);
@@ -682,7 +706,7 @@ public class ShowcaseView extends RelativeLayout
         return sv;
     }
 
-    public static ShowcaseView insertShowcaseView(View showcase, Activity activity) {
+    public static ShowcaseView insertShowcaseView(int itemActionHome, View showcase, Activity activity, String help, String s) {
         return insertShowcaseView(showcase, activity, null, null, null);
     }
 
@@ -750,6 +774,8 @@ public class ShowcaseView extends RelativeLayout
 
         public boolean block = true, noButton = false;
         public boolean hideOnClickOutside = false;
+        public int showcaseType = SHOWCASE_TYPE_NORMAL;
+
 
         /**
          * Does not work with the {@link ShowcaseViews} class as it does not make sense (only with
@@ -785,6 +811,8 @@ public class ShowcaseView extends RelativeLayout
          * Allow custom positioning of the button within the showcase view.
          */
         public LayoutParams buttonLayoutParams = null;
+
+
     }
 
 }
