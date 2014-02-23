@@ -3,6 +3,8 @@ package com.espian.showcaseview;
 import android.app.Activity;
 import android.view.View;
 
+import com.espian.showcaseview.ShowcaseView;
+
 public class ShowcaseViewBuilder {
 
     private final ShowcaseView showcaseView;
@@ -76,11 +78,6 @@ public class ShowcaseViewBuilder {
 
     public ShowcaseViewBuilder pointTo(float x, float y) {
         showcaseView.pointTo(x, y);
-        return this;
-    }
-
-    public ShowcaseViewBuilder setConfigOptions(ShowcaseView.ConfigOptions configOptions) {
-        showcaseView.setConfigOptions(configOptions);
         return this;
     }
 
