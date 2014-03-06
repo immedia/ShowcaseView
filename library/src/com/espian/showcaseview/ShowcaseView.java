@@ -88,7 +88,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
     private boolean mAlteredText = false;
     private TextAppearanceSpan mDetailSpan, mTitleSpan;
 
-    private final String buttonText;
+    private String buttonText;
     private float scaleMultiplier = 1f;
     private Bitmap mBleachedCling;
     private int mShowcaseColor;
@@ -150,6 +150,11 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
             showcase = new ColorDrawable(Color.TRANSPARENT);
             INNER_CIRCLE_RADIUS = 0;
         }
+
+        if (mOptions.buttonText >= 0) {
+            buttonText = getResources().getString(mOptions.buttonText);
+        }
+
         showcase.setColorFilter(mShowcaseColor, PorterDuff.Mode.MULTIPLY);
 
         showcaseRadius = metricScale * INNER_CIRCLE_RADIUS;
@@ -879,6 +884,7 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
         public int insert = INSERT_TO_DECOR;
         public int showcaseType = SHOWCASE_TYPE_NORMAL;
         public boolean hideOnClickOutside = false;
+        public int buttonText = -1;
 
         /**
          * Default duration for fade in animation. Set to 0 to disable.
