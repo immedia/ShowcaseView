@@ -247,7 +247,10 @@ public class ShowcaseView extends RelativeLayout implements View.OnClickListener
                 View homeButton = activity.findViewById(android.R.id.home);
                 if (homeButton == null) {
                     // Thanks to @hameno for this
-                    int homeId = activity.getResources().getIdentifier("abs__home", "id", activity.getPackageName());
+                    int homeId = activity.getResources().getIdentifier("home", "id", activity.getPackageName());
+                    if (homeId == 0) {
+                        homeId = activity.getResources().getIdentifier("abs__home", "id", activity.getPackageName());
+                    }
                     if (homeId != 0) {
                         homeButton = activity.findViewById(homeId);
                     }
